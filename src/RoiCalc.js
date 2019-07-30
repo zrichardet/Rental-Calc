@@ -5,7 +5,9 @@ export class ROICalc extends React.Component {
     super(props);
     this.state = {
       purchasePrice: 400000,
-      downPayment: 0.2
+      downPayment: 0.2,
+      monthlyIncome: 8000,
+      monthlyExpenses: 4000
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -27,6 +29,7 @@ export class ROICalc extends React.Component {
           onChange={this.handleChange("purchasePrice")}
         />
         <div>{this.state.purchasePrice}</div>
+        <div>Down Payment</div>
         <input
           type="text"
           value={this.state.downPayment}
@@ -35,6 +38,23 @@ export class ROICalc extends React.Component {
         <div>{this.state.downPayment}</div>
         <div>
           Cash to Invest: {this.state.purchasePrice * this.state.downPayment}
+        </div>
+        <div>Monthly Income</div>
+        <input
+          type="text"
+          value={this.state.monthlyIncome}
+          onChange={this.handleChange("monthlyIncome")}
+        />
+        <div>{this.state.monthlyIncome}</div>
+        <div>Monthly Expenses</div>
+        <input
+          type="text"
+          value={this.state.monthlyExpenses}
+          onChange={this.handleChange("monthlyExpenses")}
+        />
+        <div>{this.state.monthlyExpenses}</div>
+        <div>
+          {this.state.monthlyIncome / this.state.monthlyExpenses}% Cash ROI
         </div>
       </div>
     );
