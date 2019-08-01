@@ -7,7 +7,11 @@ export class ROICalc extends React.Component {
       purchasePrice: 400000,
       downPayment: 0.2,
       monthlyIncome: 8000,
-      monthlyExpenses: 4000
+      monthlyMortgage: 2000,
+      capitalExpenditures: 0.08,
+      maintenanceFee: 0.05,
+      vacancyRate: 0.08,
+      managementFee: 0.08
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -46,15 +50,43 @@ export class ROICalc extends React.Component {
           onChange={this.handleChange("monthlyIncome")}
         />
         <div>{this.state.monthlyIncome}</div>
-        <div>Monthly Expenses</div>
+        <div>Monthly Mortgage</div>
         <input
           type="text"
-          value={this.state.monthlyExpenses}
-          onChange={this.handleChange("monthlyExpenses")}
+          value={this.state.monthlyMortgage}
+          onChange={this.handleChange("monthlyMortgage")}
         />
-        <div>{this.state.monthlyExpenses}</div>
+        <div>{this.state.monthlyMortgage}</div>
+        <div>Management Fee</div>
+        <input
+          type="text"
+          value={this.state.managementFee}
+          onChange={this.handleChange("managementFee")}
+        />
+        <div>{this.state.managementFee * this.state.monthlyIncome}</div>
+        <div>Maintenance Fee</div>
+        <input
+          type="text"
+          value={this.state.maintenanceFee}
+          onChange={this.handleChange("maintenanceFee")}
+        />
+        <div>{this.state.maintenanceFee * this.state.monthlyIncome}</div>
+        <div>Vacancy Rate</div>
+        <input
+          type="text"
+          value={this.state.vacancyRate}
+          onChange={this.handleChange("vacancyRate")}
+        />
+        <div>{this.state.vacancyRate * this.state.monthlyIncome}</div>
+        <div>Capital Expenditures</div>
+        <input
+          type="text"
+          value={this.state.capitalExpenditures}
+          onChange={this.handleChange("capitalExpenditures")}
+        />
+        <div>{this.state.capitalExpenditures * this.state.monthlyIncome}</div>
         <div>
-          {this.state.monthlyIncome / this.state.monthlyExpenses}% Cash ROI
+          {this.state.monthlyIncome / this.state.monthlyMortgage}% Cash ROI
         </div>
       </div>
     );
