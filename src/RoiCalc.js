@@ -9,7 +9,7 @@ export class ROICalc extends React.Component {
       monthlyIncome: 8000,
       monthlyMortgage: 2000,
       capitalExpenditures: 0.08,
-      maintenanceFee: 0.05,
+      maintenanceFee: 0.08,
       vacancyRate: 0.08,
       managementFee: 0.08
     };
@@ -22,7 +22,20 @@ export class ROICalc extends React.Component {
       _this.setState(newState);
     };
   }
-
+  sumExpenses() {
+    let totalExpenses =
+      this.state.monthlyMortgage +
+      this.state.monthlyIncome * this.state.vacancyRate +
+      this.state.monthlyIncome * this.state.managementFee +
+      this.state.monthlyIncome * this.state.maintenanceFee +
+      this.state.monthlyIncome * this.state.capitalExpenditures;
+    return totalExpenses;
+  }
+  calculateROI() {
+    let NOI = this.state.monthlyIncome * 12 - this.sumExpenses() * 12;
+    let ROI = (NOI / (this.state.purchasePrice * this.state.downPayment)) * 100;
+    return ROI.toFixed(1);
+  }
   render() {
     return (
       <div>
@@ -86,8 +99,9 @@ export class ROICalc extends React.Component {
         />
         <div>{this.state.capitalExpenditures * this.state.monthlyIncome}</div>
         <div>
-          {this.state.monthlyIncome / this.state.monthlyMortgage}% Cash ROI
+          ${this.state.monthlyIncome - this.sumExpenses()} NOI per Month
         </div>
+        <div>{this.calculateROI()}% Cash ROI</div>
       </div>
     );
   }
