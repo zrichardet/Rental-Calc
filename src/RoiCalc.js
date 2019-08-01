@@ -1,4 +1,5 @@
 import React from "react";
+import { LineChart, YAxis, XAxis, CartesianGrid, Line } from "recharts";
 
 export class ROICalc extends React.Component {
   constructor(props) {
@@ -11,30 +12,48 @@ export class ROICalc extends React.Component {
       capitalExpenditures: 0.08,
       maintenanceFee: 0.08,
       vacancyRate: 0.08,
-      managementFee: 0.08
+      managementFee: 0.08,
+      returnYears: 30
     };
     this.handleChange = this.handleChange.bind(this);
   }
   handleChange(field) {
     const _this = this;
     return function(evt) {
-      const newState = { [field]: evt.target.value };
+      const newState = { [field]: parseFloat(evt.target.value) };
       _this.setState(newState);
     };
   }
   sumExpenses() {
     let totalExpenses =
-      this.state.monthlyMortgage +
+      this.state.monthlyMortgage * 1 +
       this.state.monthlyIncome * this.state.vacancyRate +
       this.state.monthlyIncome * this.state.managementFee +
       this.state.monthlyIncome * this.state.maintenanceFee +
       this.state.monthlyIncome * this.state.capitalExpenditures;
     return totalExpenses;
   }
+  calculateNOI() {
+    return this.state.monthlyIncome * 12 - this.sumExpenses() * 12;
+  }
   calculateROI() {
-    let NOI = this.state.monthlyIncome * 12 - this.sumExpenses() * 12;
-    let ROI = (NOI / (this.state.purchasePrice * this.state.downPayment)) * 100;
+    let ROI =
+      (this.calculateNOI() /
+        (this.state.purchasePrice * this.state.downPayment)) *
+      100;
     return ROI.toFixed(1);
+  }
+  makeReturnTable(years) {
+    let table = [];
+    [...Array(years).keys()].forEach(i => {
+      let returnObject = {
+        year: i,
+        return: this.calculateNOI() * (i + 1)
+      };
+      table.push(returnObject);
+    });
+
+    return table;
   }
   render() {
     return (
@@ -102,6 +121,40 @@ export class ROICalc extends React.Component {
           ${this.state.monthlyIncome - this.sumExpenses()} NOI per Month
         </div>
         <div>{this.calculateROI()}% Cash ROI</div>
+        <h3>return</h3>
+        <div>Years</div>
+        <input
+          type="text"
+          value={this.state.returnYears}
+          onChange={this.handleChange("returnYears")}
+        />
+
+        <LineChart
+          width={500}
+          height={300}
+          data={this.makeReturnTable(this.state.returnYears)}
+        >
+          <XAxis dataKey="year" />
+          <YAxis />
+          <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+          <Line type="monotone" dataKey="return" stroke="#8884d8" />
+        </LineChart>
+        <div>
+          <table>
+            <tr>
+              <th>Year</th>
+              <th>Profit</th>
+            </tr>
+            {this.makeReturnTable(this.state.returnYears).map(returnObject => {
+              return (
+                <tr>
+                  <td>{returnObject.year + 1}</td>
+                  <td>{returnObject.return}</td>
+                </tr>
+              );
+            })}
+          </table>
+        </div>
       </div>
     );
   }
