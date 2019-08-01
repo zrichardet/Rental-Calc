@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { ROICalc } from "./RoiCalc";
+import ROICalc from "./RoiCalc";
 
 function App() {
   return (
