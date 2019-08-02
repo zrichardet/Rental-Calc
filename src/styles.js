@@ -2,13 +2,13 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles(theme => ({
   container: {
-    display: "flex",
+    display: "in-line",
     flexWrap: "wrap"
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200
+    width: 500
   },
   dense: {
     marginTop: 19

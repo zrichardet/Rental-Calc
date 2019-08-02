@@ -102,7 +102,6 @@ export default function ROICalc() {
           }}
           margin="normal"
         />
-        <br />
         <TextField
           id="management-fee"
           label="Management Fee"
@@ -115,7 +114,6 @@ export default function ROICalc() {
           }}
           margin="normal"
         />
-        <div>${values.managementFee * values.monthlyIncome}</div>
         <TextField
           id="maintenance-fee"
           label="Maintenance Fee"
@@ -128,7 +126,6 @@ export default function ROICalc() {
           }}
           margin="normal"
         />
-        <div>${values.maintenanceFee * values.monthlyIncome}</div>
         <TextField
           id="vacancy-rate"
           label="Vacancy Rate"
@@ -141,7 +138,6 @@ export default function ROICalc() {
           }}
           margin="normal"
         />
-        <div>${values.vacancyRate * values.monthlyIncome}</div>
         <TextField
           id="cap-ex"
           label="Capital Expenditures"
@@ -154,11 +150,8 @@ export default function ROICalc() {
           }}
           margin="normal"
         />
-        <div>${values.capitalExpenditures * values.monthlyIncome}</div>
-        <div>
-          ${values.monthlyIncome - sumExpenses()} NOI per Month
-          {calculateROI()}% Cash ROI
-        </div>
+        <div>${values.monthlyIncome - sumExpenses()} NOI per Month</div>
+        <div>{calculateROI()}% Cash ROI</div>
         <div>Years</div>
         <TextField
           id="years"
