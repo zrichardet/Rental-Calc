@@ -15,6 +15,9 @@ export const useStyles = makeStyles(theme => ({
   },
   menu: {
     width: 200
+  },
+  root: {
+    flexGrow: 1
   }
 }));
 

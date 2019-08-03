@@ -2,6 +2,9 @@ import React from "react";
 import { LineChart, YAxis, XAxis, CartesianGrid, Line } from "recharts";
 import useStyles from "./styles";
 import { TextField } from "@material-ui/core";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
 
 export default function ROICalc() {
   const classes = useStyles();
@@ -50,8 +53,18 @@ export default function ROICalc() {
 
     return table;
   }
+  function SimpleAppBar() {
+    const classes = useStyles();
+  }
   return (
     <div>
+      <AppBar position="static" color="default">
+        <Toolbar>
+          <Typography variant="h6" color="inherit">
+            Real Estate Calculator
+          </Typography>
+        </Toolbar>
+      </AppBar>
       <form className={classes.container} noValidate autoComplete="off">
         <TextField
           id="purchase-price"
@@ -169,7 +182,7 @@ export default function ROICalc() {
       <LineChart
         width={500}
         height={300}
-        data={makeReturnTable(values.returnYears)}
+        data={makeReturnTable(values.returnYears + 1)}
       >
         <XAxis dataKey="year" />
         <YAxis />
