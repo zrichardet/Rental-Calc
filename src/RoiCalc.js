@@ -17,7 +17,10 @@ export default function ROICalc() {
     maintenanceFee: 0.08,
     vacancyRate: 0.08,
     managementFee: 0.08,
-    returnYears: 30
+    returnYears: 30,
+    loanAmount: 160000,
+    loanTerm: 30,
+    interestRate: 0.036
   });
 
   const handleChange = field => evt => {
@@ -56,6 +59,46 @@ export default function ROICalc() {
   function SimpleAppBar() {
     const classes = useStyles();
   }
+
+  function mortgagePayment() {
+    let monthlyRate = values.interestRate / 12;
+    let numOfPayments = values.loanTerm * 12;
+    let numerator = monthlyRate * (1 + monthlyRate) ** numOfPayments;
+    let denominator = (1 + monthlyRate) ** numOfPayments - 1;
+    let principal = values.loanAmount * (numerator / denominator);
+    return principal.toFixed(2);
+  }
+
+  function interestPayment() {
+    let monthlyInterest = values.loanAmount * (values.interestRate / 12);
+    return monthlyInterest.toFixed(2);
+  }
+
+  function principalPayment() {
+    let principalPayment = mortgagePayment() - interestPayment();
+    return principalPayment.toFixed(2);
+  }
+  function loanPaydown() {
+    var i;
+    for (i = 0; i < 30; i++) {
+      values.loanAmount = values.loanAmount - principalPayment() * 12;
+      return values.loanAmount.toFixed(2);
+    }
+  }
+
+  function makeBalanceTable(years) {
+    let table = [];
+    [...Array(years).keys()].forEach(i => {
+      let returnObject = {
+        year: i,
+        return: loanPaydown() * (i + 1)
+      };
+      table.push(returnObject);
+    });
+
+    return table;
+  }
+
   return (
     <div>
       <AppBar position="static" color="default">
@@ -189,16 +232,67 @@ export default function ROICalc() {
         <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
         <Line type="monotone" dataKey="return" stroke="#8884d8" />
       </LineChart>
+      <TextField
+        id="Lone-Amount"
+        label="Loan Amount"
+        type="number"
+        value={values.loanAmount}
+        onChange={handleChange("loanAmount")}
+        className={classes.textField}
+        InputLabelProps={{
+          shrink: true
+        }}
+        margin="normal"
+      />
+      <TextField
+        id="Loan-Term"
+        label="Loan Term"
+        type="number"
+        value={values.loanTerm}
+        onChange={handleChange("loanTerm")}
+        className={classes.textField}
+        InputLabelProps={{
+          shrink: true
+        }}
+        margin="normal"
+      />
+      <TextField
+        id="interest-rate"
+        label="Interest Rate"
+        type="number"
+        value={values.interestRate}
+        onChange={handleChange("interestRate")}
+        className={classes.textField}
+        InputLabelProps={{
+          shrink: true
+        }}
+        margin="normal"
+      />
+      <div>Monthly Payment ${mortgagePayment()}</div>
+      <div>Interest Payment ${interestPayment()}</div>
+      <div>Principal Payment ${principalPayment()}</div>
+      <div>Remaining Balance ${loanPaydown()}</div>
       <div>
         <table>
           <thead>
             <tr>
               <th>Year</th>
               <th>Profit</th>
+              <th>Balance</th>
             </tr>
           </thead>
           <tbody>
             {makeReturnTable(values.returnYears).map(returnObject => {
+              return (
+                <tr key={returnObject.year}>
+                  <td>{returnObject.year + 1}</td>
+                  <td>{returnObject.return}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+          <tbody>
+            {makeBalanceTable(values.returnYears).map(returnObject => {
               return (
                 <tr key={returnObject.year}>
                   <td>{returnObject.year + 1}</td>
