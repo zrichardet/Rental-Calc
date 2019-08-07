@@ -5,6 +5,7 @@ import { TextField } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import * as calculators from "./calculators";
 
 export default function ROICalc() {
   const classes = useStyles();
@@ -27,76 +28,8 @@ export default function ROICalc() {
     setValues({ ...values, [field]: parseFloat(evt.target.value) });
   };
 
-  function sumExpenses() {
-    let totalExpenses =
-      values.monthlyMortgage * 1 +
-      values.monthlyIncome * values.vacancyRate +
-      values.monthlyIncome * values.managementFee +
-      values.monthlyIncome * values.maintenanceFee +
-      values.monthlyIncome * values.capitalExpenditures;
-    return totalExpenses;
-  }
-  function calculateNOI() {
-    return values.monthlyIncome * 12 - sumExpenses() * 12;
-  }
-  function calculateROI() {
-    let ROI =
-      (calculateNOI() / (values.purchasePrice * values.downPayment)) * 100;
-    return ROI.toFixed(1);
-  }
-  function makeReturnTable(years) {
-    let table = [];
-    [...Array(years).keys()].forEach(i => {
-      let returnObject = {
-        year: i,
-        return: calculateNOI() * (i + 1)
-      };
-      table.push(returnObject);
-    });
-
-    return table;
-  }
   function SimpleAppBar() {
     const classes = useStyles();
-  }
-
-  function mortgagePayment() {
-    let monthlyRate = values.interestRate / 12;
-    let numOfPayments = values.loanTerm * 12;
-    let numerator = monthlyRate * (1 + monthlyRate) ** numOfPayments;
-    let denominator = (1 + monthlyRate) ** numOfPayments - 1;
-    let principal = values.loanAmount * (numerator / denominator);
-    return principal.toFixed(2);
-  }
-
-  function interestPayment() {
-    let monthlyInterest = values.loanAmount * (values.interestRate / 12);
-    return monthlyInterest.toFixed(2);
-  }
-
-  function principalPayment() {
-    let principalPayment = mortgagePayment() - interestPayment();
-    return principalPayment.toFixed(2);
-  }
-  function loanPaydown() {
-    var i;
-    for (i = 0; i < 30; i++) {
-      values.loanAmount = values.loanAmount - principalPayment() * 12;
-      return values.loanAmount.toFixed(2);
-    }
-  }
-
-  function makeBalanceTable(years) {
-    let table = [];
-    [...Array(years).keys()].forEach(i => {
-      let returnObject = {
-        year: i,
-        return: loanPaydown() * (i + 1)
-      };
-      table.push(returnObject);
-    });
-
-    return table;
   }
 
   return (
@@ -206,8 +139,35 @@ export default function ROICalc() {
           }}
           margin="normal"
         />
-        <div>${values.monthlyIncome - sumExpenses()} NOI per Month</div>
-        <div>{calculateROI()}% Cash ROI</div>
+        <div>
+          $
+          {values.monthlyIncome -
+            calculators.sumExpenses(
+              values.monthlyMortgage,
+              values.monthlyIncome,
+              values.vacancyRate,
+              values.managementFee,
+              values.maintenanceFee,
+              values.capitalExpenditures
+            )}{" "}
+          NOI per Month
+        </div>
+        <div>
+          {calculators.calculateROI(
+            values.monthlyIncome,
+            values.purchasePrice,
+            values.downPayment,
+            calculators.sumExpenses(
+              values.monthlyMortgage,
+              values.monthlyIncome,
+              values.vacancyRate,
+              values.managementFee,
+              values.maintenanceFee,
+              values.capitalExpenditures
+            )
+          )}
+          % Cash ROI
+        </div>
         <div>Years</div>
         <TextField
           id="years"
@@ -225,7 +185,7 @@ export default function ROICalc() {
       <LineChart
         width={500}
         height={300}
-        data={makeReturnTable(values.returnYears + 1)}
+        data={calculators.makeReturnTable(values.returnYears + 1)}
       >
         <XAxis dataKey="year" />
         <YAxis />
@@ -268,10 +228,34 @@ export default function ROICalc() {
         }}
         margin="normal"
       />
-      <div>Monthly Payment ${mortgagePayment()}</div>
-      <div>Interest Payment ${interestPayment()}</div>
-      <div>Principal Payment ${principalPayment()}</div>
-      <div>Remaining Balance ${loanPaydown()}</div>
+      <div>
+        Monthly Payment $
+        {calculators.mortgagePayment(
+          values.interestRate,
+          values.loanTerm,
+          values.loanAmount
+        )}
+      </div>
+      <div>
+        Interest Payment $
+        {calculators.interestPayment(values.loanAmount, values.interestRate)}
+      </div>
+      <div>
+        Principal Payment $
+        {calculators.principalPayment(
+          values.loanAmount,
+          values.loanTerm,
+          values.interestRate
+        )}
+      </div>
+      <div>
+        Remaining Balance $
+        {calculators.loanPaydown(
+          values.loanAmount,
+          values.loanTerm,
+          values.interestRate
+        )}
+      </div>
       <div>
         <table>
           <thead>
@@ -282,24 +266,28 @@ export default function ROICalc() {
             </tr>
           </thead>
           <tbody>
-            {makeReturnTable(values.returnYears).map(returnObject => {
-              return (
-                <tr key={returnObject.year}>
-                  <td>{returnObject.year + 1}</td>
-                  <td>{returnObject.return}</td>
-                </tr>
-              );
-            })}
+            {calculators
+              .makeReturnTable(values.returnYears)
+              .map(returnObject => {
+                return (
+                  <tr key={returnObject.year}>
+                    <td>{returnObject.year + 1}</td>
+                    <td>{returnObject.return}</td>
+                  </tr>
+                );
+              })}
           </tbody>
           <tbody>
-            {makeBalanceTable(values.returnYears).map(returnObject => {
-              return (
-                <tr key={returnObject.year}>
-                  <td>{returnObject.year + 1}</td>
-                  <td>{returnObject.return}</td>
-                </tr>
-              );
-            })}
+            {calculators
+              .makeBalanceTable(values.returnYears)
+              .map(returnObject => {
+                return (
+                  <tr key={returnObject.year}>
+                    <td>{returnObject.year + 1}</td>
+                    <td>{returnObject.return}</td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>
