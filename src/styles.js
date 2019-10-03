@@ -1,6 +1,9 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 export const useStyles = makeStyles(theme => ({
+  root: {
+    width: 500
+  },
   container: {
     display: "in-line",
     flexWrap: "wrap"
@@ -8,7 +11,7 @@ export const useStyles = makeStyles(theme => ({
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 500
+    width: 250
   },
   dense: {
     marginTop: 19
@@ -16,7 +19,7 @@ export const useStyles = makeStyles(theme => ({
   menu: {
     width: 200
   },
-  root: {
+  appBar: {
     flexGrow: 1
   }
 }));

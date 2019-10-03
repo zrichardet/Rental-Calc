@@ -1,0 +1,15 @@
+{
+  "purchasePrice": 200000,
+  "downPayment": 0.2,
+  "monthlyIncome": 4000,
+  "monthlyMortgage": 1000,
+  "capitalExpenditures": 0.08,
+  "maintenanceFee": 0.08,
+  "vacancyRate": 0.08,
+  "managementFee": 0.08,
+  "returnYears": 30,
+  "loanAmount": 160000,
+  "loanTerm": 30,
+  "interestRate": 0.036,
+  "percentROI": 0.05
+}

@@ -4,10 +4,16 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "4.3.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "create-react-app": "3.1.1",
+    "express": "4.17.1",
+    "react": "16.9.0",
+    "react-dom": "16.9.0",
+    "react-redux": "7.1.1",
     "react-scripts": "3.0.1",
-    "recharts": "1.6.2"
+    "recharts": "1.6.2",
+    "redux": "4.0.4",
+    "redux-starter-kit": "0.6.3",
+    "roicalc": "file:../rental-calclib"
   },
   "scripts": {
     "start": "react-scripts start",
