@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import { LineChart, YAxis, XAxis, CartesianGrid, Line } from "recharts";
 import useStyles from "./styles";
 import { TextField } from "@material-ui/core";
@@ -13,21 +14,34 @@ import { createStore } from "redux";
 export default function ROICalc() {
   const classes = useStyles();
   const [values, setValues] = React.useState({
-    name: "test",
-    purchasePrice: 200000,
-    downPayment: 0.2,
-    monthlyIncome: 4000,
-    monthlyMortgage: 1000,
-    capitalExpenditures: 0.08,
-    maintenanceFee: 0.08,
-    vacancyRate: 0.08,
-    managementFee: 0.08,
-    returnYears: 30,
-    loanAmount: 160000,
-    loanTerm: 30,
-    interestRate: 0.036,
-    percentROI: 0.05
+    loading: true
   });
+
+  const fetchCalculation = () => {
+    axios({
+      url: "/calculation/test",
+      method: "get"
+    }).then(
+      response => {
+        setValues({ ...response.data, loading: false });
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  };
+
+  const saveCalculation = () => {
+    //Fill Me In
+  };
+
+  //2. A drop down with report name 'test'
+
+  //1. {loading:true}
+
+  useEffect(() => {
+    fetchCalculation();
+  }, []);
 
   const handleChange = field => evt => {
     setValues({ ...values, [field]: parseFloat(evt.target.value) });
