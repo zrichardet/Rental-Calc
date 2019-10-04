@@ -1,7 +1,7 @@
 {
-  "purchasePrice": 40000000,
+  "purchasePrice": 1,
   "downPayment": 0.2,
-  "monthlyIncome": 4000,
+  "monthlyIncome": 2000,
   "monthlyMortgage": 1000,
   "capitalExpenditures": 0.08,
   "maintenanceFee": 0.08,

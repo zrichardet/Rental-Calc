@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, componentWillMount } from "react";
 import axios from "axios";
-import { LineChart, YAxis, XAxis, CartesianGrid, Line } from "recharts";
+// import { LineChart, YAxis, XAxis, CartesianGrid, Line } from "recharts";
 import useStyles from "./styles";
 import { TextField } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
@@ -10,11 +10,15 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import * as calculators from "roicalc";
 import { createStore } from "redux";
+import { separateMessageFromStack } from "jest-message-util";
+import { convertPatternGroupToTask } from "fast-glob/out/managers/tasks";
 
 export default function ROICalc() {
   const classes = useStyles();
   const [values, setValues] = React.useState({
-    loading: true
+    componentWillMount() {
+      setValues({ ...values.data, loaded: true });
+    }
   });
 
   const fetchCalculation = () => {
@@ -32,10 +36,21 @@ export default function ROICalc() {
   };
 
   const saveCalculation = () => {
-    //Fill Me In
+    axios({
+      url: "/calculation/test",
+      method: "post",
+      data: values
+    }).then(
+      response => {
+        setValues({ ...response.data, loading: true });
+      },
+      error => {
+        console.log(error);
+      }
+    );
   };
 
-  //2. A drop down with report name 'test'
+  //3. A drop down with report name 'test'
 
   //1. {loading:true}
 
@@ -273,6 +288,9 @@ export default function ROICalc() {
             )}
             % Cash ROI
           </div>
+          {/* <div>
+            <button onClick={saveCalculation("values")}>Save</button>
+          </div> */}
           <br />
           <Typography id="discrete-slider-always" gutterBottom>
             Desired ROI
@@ -301,7 +319,7 @@ export default function ROICalc() {
             )}
           </div>
         </form>
-        <LineChart
+        {/* <LineChart
           width={500}
           height={300}
           data={calculators.makeReturnTable(values.loanTerm + 1)}
@@ -310,7 +328,7 @@ export default function ROICalc() {
           <YAxis />
           <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
           <Line type="monotone" dataKey="return" stroke="#8884d8" />
-        </LineChart>
+        </LineChart> */}
         {/* <div>
         Interest Payment $
         {calculators.interestPayment(values.loanAmount, values.interestRate)}
