@@ -1,5 +1,5 @@
 {
-  "purchasePrice": 1,
+  "purchasePrice": 200000,
   "downPayment": 0.2,
   "monthlyIncome": 2000,
   "monthlyMortgage": 1000,
@@ -11,5 +11,7 @@
   "loanAmount": 160000,
   "loanTerm": 30,
   "interestRate": 0.036,
-  "percentROI": 0.05
+  "percentROI": 0.05,
+  "loading": false,
+  "saveSuccessful": true
 }

@@ -17,7 +17,7 @@ export default function ROICalc() {
   const classes = useStyles();
   const [values, setValues] = React.useState({
     componentWillMount() {
-      setValues({ ...values.data, loaded: true });
+      setValues({ ...values.data, loaded: true, saveSuccessful: false });
     }
   });
 
@@ -41,8 +41,8 @@ export default function ROICalc() {
       method: "post",
       data: values
     }).then(
-      response => {
-        setValues({ ...response.data, loading: true });
+      () => {
+        setValues({ ...values, saveSuccessful: true });
       },
       error => {
         console.log(error);
@@ -132,6 +132,11 @@ export default function ROICalc() {
           <Typography variant="h6" color="inherit">
             Real Estate Calculator
           </Typography>
+          {values.saveSuccessful ? (
+            <div>It Was Saved!</div>
+          ) : (
+            <React.Fragment />
+          )}
         </Toolbar>
       </AppBar>
       <Grid item xs>
@@ -288,9 +293,16 @@ export default function ROICalc() {
             )}
             % Cash ROI
           </div>
-          {/* <div>
-            <button onClick={saveCalculation("values")}>Save</button>
-          </div> */}
+          <div>
+            <button
+              onClick={evt => {
+                evt.preventDefault();
+                saveCalculation();
+              }}
+            >
+              Save
+            </button>
+          </div>
           <br />
           <Typography id="discrete-slider-always" gutterBottom>
             Desired ROI
