@@ -1,1 +1,22 @@
-{"purchasePrice":250000,"downPayment":0.2,"monthlyIncome":2000,"monthlyMortgage":1000,"capitalExpenditures":0.08,"maintenanceFee":0.08,"vacancyRate":0.08,"managementFee":0.08,"returnYears":30,"loanAmount":160000,"loanTerm":30,"interestRate":0.036,"percentROI":0.05,"loading":false,"saveSuccessful":true}
+{
+  "addressOne": 5529,
+  "addressTwo": null,
+  "propertyCity": null,
+  "propertyState": null,
+  "propertyZip": 63109,
+  "purchasePrice": 250000,
+  "downPayment": 0.2,
+  "monthlyIncome": 2000,
+  "monthlyMortgage": 1000,
+  "capitalExpenditures": 0.08,
+  "maintenanceFee": 0.08,
+  "vacancyRate": 0.08,
+  "managementFee": 0.08,
+  "returnYears": 30,
+  "loanAmount": 160000,
+  "loanTerm": 30,
+  "interestRate": 0.04,
+  "percentROI": 0.05,
+  "loading": false,
+  "saveSuccessful": true
+}

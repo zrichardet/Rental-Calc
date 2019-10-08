@@ -1,4 +1,9 @@
 {
+  "addressOne": "",
+  "addressTwo": "",
+  "propertyCity": "",
+  "propertyState": "",
+  "propertyZip": "",
   "purchasePrice": 200000,
   "downPayment": 0.2,
   "monthlyIncome": 4000,

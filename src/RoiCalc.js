@@ -202,6 +202,65 @@ export default function ROICalc() {
           </Toolbar>
         </AppBar>
       </div>
+      <div>
+        <form>
+          <TextField
+            required
+            id="property-address"
+            label="Address 1"
+            type="object"
+            value={values.addressOne}
+            onChange={handleChange("addressOne")}
+            className={classes.textField}
+            margin="normal"
+            variant="outlined"
+          />
+          <TextField
+            id="property-address-2"
+            label="Address 2"
+            type="object"
+            value={values.addressTwo}
+            onChange={handleChange("addressTwo")}
+            className={classes.textField}
+            margin="normal"
+            variant="outlined"
+          />
+          <div></div>
+          <TextField
+            required
+            id="property-city"
+            label="City"
+            type="object"
+            value={values.propertyCity}
+            onChange={handleChange("propertyCity")}
+            className={classes.textField}
+            margin="normal"
+            variant="outlined"
+          />
+          <TextField
+            required
+            id="property-state"
+            label="State"
+            type="object"
+            value={values.propertyState}
+            onChange={handleChange("propertyState")}
+            className={classes.textField}
+            margin="normal"
+            variant="outlined"
+          />
+          <TextField
+            required
+            id="property-zip"
+            label="Zip Code"
+            type="number"
+            value={values.propertyZip}
+            onChange={handleChange("propertyZip")}
+            className={classes.textField}
+            margin="normal"
+            variant="outlined"
+          />
+        </form>
+      </div>
       <Grid item xs>
         <form className={classes.container} noValidate autoComplete="off">
           <TextField
