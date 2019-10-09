@@ -16,5 +16,6 @@
   "loanAmount": 160000,
   "loanTerm": 30,
   "interestRate": 0.036,
-  "percentROI": 0.05
+  "percentROI": 0.05,
+  "desiredROI": 0.05
 }

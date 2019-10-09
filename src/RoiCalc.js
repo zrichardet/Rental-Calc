@@ -11,6 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import Paper from "@material-ui/core/Paper";
+import Input from "@material-ui/core/Input";
 import Grow from "@material-ui/core/Grow";
 import Popper from "@material-ui/core/Popper";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -120,10 +121,25 @@ export default function ROICalc() {
   function optimizeIncome(
     purchasePrice,
     downPayment,
-    percentROI,
-    totalExpenses
+    desiredROI,
+    monthlyMortgage,
+    monthlyIncome,
+    vacancyRate,
+    managementFee,
+    maintenanceFee,
+    capitalExpenditures
   ) {
-    return (purchasePrice * downPayment * percentROI) / 100 + totalExpenses;
+    return (
+      (purchasePrice * downPayment * desiredROI) / 100 +
+      calculators.sumExpenses(
+        monthlyMortgage,
+        monthlyIncome,
+        vacancyRate,
+        managementFee,
+        maintenanceFee,
+        capitalExpenditures
+      )
+    );
   }
 
   const totalExpenses = calculators.sumExpenses(
@@ -203,61 +219,62 @@ export default function ROICalc() {
         </AppBar>
       </div>
       <div>
-        <form>
-          <TextField
-            required
-            id="property-address"
-            label="Address 1"
-            type="object"
-            value={values.addressOne}
+        <form noValidate autoComplete="off">
+          <Input
+            id="property-address-one"
+            defaultValue={values.addressOne}
             onChange={handleChange("addressOne")}
-            className={classes.textField}
-            margin="normal"
-            variant="outlined"
+            placeholder="Address 1"
+            className={classes.input}
+            inputProps={{
+              "aria-label": "description",
+              type: "text"
+            }}
           />
-          <TextField
-            id="property-address-2"
-            label="Address 2"
-            type="object"
-            value={values.addressTwo}
+          <Input
+            id="property-address-two"
+            defaultValue={values.addressTwo}
             onChange={handleChange("addressTwo")}
-            className={classes.textField}
-            margin="normal"
-            variant="outlined"
+            placeholder="Address 2"
+            className={classes.input}
+            inputProps={{
+              "aria-label": "description",
+              type: "text"
+            }}
           />
           <div></div>
-          <TextField
-            required
+          <Input
             id="property-city"
-            label="City"
-            type="object"
-            value={values.propertyCity}
+            defaultValue={values.propertyCity}
             onChange={handleChange("propertyCity")}
-            className={classes.textField}
-            margin="normal"
-            variant="outlined"
+            placeholder="City"
+            className={classes.input}
+            inputProps={{
+              "aria-label": "description",
+              type: "text"
+            }}
           />
-          <TextField
-            required
+          <Input
             id="property-state"
-            label="State"
-            type="object"
-            value={values.propertyState}
+            defaultValue={values.propertyState}
             onChange={handleChange("propertyState")}
-            className={classes.textField}
-            margin="normal"
-            variant="outlined"
+            placeholder="State"
+            className={classes.input}
+            inputProps={{
+              "aria-label": "description",
+              type: "text"
+            }}
           />
-          <TextField
-            required
+          <Input
             id="property-zip"
-            label="Zip Code"
-            type="number"
-            value={values.propertyZip}
+            defaultValue={values.propertyZip}
             onChange={handleChange("propertyZip")}
-            className={classes.textField}
-            margin="normal"
-            variant="outlined"
+            placeholder="Zip Code"
+            className={classes.input}
+            inputProps={{
+              "aria-label": "description",
+              type: "text"
+            }}
           />
         </form>
       </div>
@@ -292,7 +309,11 @@ export default function ROICalc() {
           </div>
           <div>
             Loan Amount $
-            {values.purchasePrice - values.purchasePrice * values.downPayment}{" "}
+            {
+              (values.loanAmount =
+                values.purchasePrice -
+                values.purchasePrice * values.downPayment)
+            }{" "}
           </div>
           <TextField
             id="Loan-Term"
@@ -320,11 +341,13 @@ export default function ROICalc() {
           />
           <div>
             Mortgage Payment $
-            {calculators.mortgagePayment(
-              values.interestRate,
-              values.loanTerm,
-              values.loanAmount
-            )}
+            {
+              (values.monthlyMortgage = calculators.mortgagePayment(
+                values.interestRate,
+                values.loanTerm,
+                values.loanAmount
+              ))
+            }
           </div>
           <TextField
             id="income"
@@ -400,19 +423,21 @@ export default function ROICalc() {
             NOI per Month
           </div>
           <div>
-            {calculators.calculateROI(
-              values.monthlyIncome,
-              values.purchasePrice,
-              values.downPayment,
-              calculators.sumExpenses(
-                values.monthlyMortgage,
+            {
+              (values.percentROI = calculators.calculateROI(
                 values.monthlyIncome,
-                values.vacancyRate,
-                values.managementFee,
-                values.maintenanceFee,
-                values.capitalExpenditures
-              )
-            )}
+                values.purchasePrice,
+                values.downPayment,
+                calculators.sumExpenses(
+                  values.monthlyMortgage,
+                  values.monthlyIncome,
+                  values.vacancyRate,
+                  values.managementFee,
+                  values.maintenanceFee,
+                  values.capitalExpenditures
+                )
+              ))
+            }
             % Cash ROI
           </div>
           <div>
@@ -434,8 +459,8 @@ export default function ROICalc() {
             <Slider
               className={classes.root}
               defaultValue={0.05}
-              Value={values.percentROI}
-              onChange={handleChange("percentROI")}
+              Value={values.desiredROI}
+              onChange={handleChange("desiredROI")}
               label="discrete-slider-always"
               align="center"
               step={0.01}
@@ -449,7 +474,13 @@ export default function ROICalc() {
             {optimizeIncome(
               values.purchasePrice,
               values.downPayment,
-              values.percentROI
+              values.desiredROI,
+              values.monthlyMortgage,
+              values.monthlyIncome,
+              values.vacancyRate,
+              values.managementFee,
+              values.maintenanceFee,
+              values.capitalExpenditures
             )}
           </div>
         </form>
